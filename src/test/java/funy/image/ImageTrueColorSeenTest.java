@@ -46,8 +46,9 @@ public class ImageTrueColorSeenTest {
 				try {
 					boolean isBW = colorSeen.isLooksBlackWhite(s.toAbsolutePath().toString());
 					System.out.println("[" + s.toAbsolutePath() + "] = " + isBW);
-//					Files.copy(s.toAbsolutePath(), new File(
-//						((isBW)?bwWriteOutPath:colorWriteOutPath) + s.getFileName()).toPath());					
+//					Files.copy(s.toAbsolutePath(),
+//						new File(((isBW)?bwWriteOutPath:colorWriteOutPath) 
+//								+ s.getFileName()).toPath());					
 //				} catch (ImageFormatException | IOException e) {
 				} catch (ImageFormatException e) {
 					System.out.println(e.getMessage());
@@ -70,8 +71,9 @@ public class ImageTrueColorSeenTest {
 			try {
 				boolean isBW = colorSeen.isLooksBlackWhite(s.getAbsolutePath());
 				System.out.println("parallel - [" + s.toPath() + "] = " + isBW);
-//				Files.copy(s.toPath(), new File(
-//					((isBW)?bwWriteOutPath:colorWriteOutPath) + s.getName() + "-parallel").toPath());
+//				Files.copy(s.toPath(), 
+//					new File(((isBW)?bwWriteOutPath:colorWriteOutPath) 
+//							+ s.getName() + "-parallel").toPath());
 //			} catch (ImageFormatException | IOException e) { 
 			} catch (ImageFormatException e) { 
 				System.out.println(e.getMessage());
@@ -95,14 +97,15 @@ public class ImageTrueColorSeenTest {
 					System.out.println("async - [" + s.toPath() + "] = " + isBW);	
 					if (ex != null) {
 						System.out.println(ex.getMessage());
-//						return;
+					} else {
+//						try {
+//							Files.copy(s.toPath(), 
+//								new File(((isBW)?bwWriteOutPath:colorWriteOutPath) 
+//										+ s.getName() + "-async").toPath());					
+//						} catch (IOException e) {
+//							e.printStackTrace();
+//						}
 					}
-//					try {
-//						Files.copy(s.toPath(), new File(
-//							((isBW)?bwWriteOutPath:colorWriteOutPath) + s.getName() + "-async").toPath());					
-//					} catch (IOException e) {
-//						e.printStackTrace();
-//					}
 				});
 			});
 		
