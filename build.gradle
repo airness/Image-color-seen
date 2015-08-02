@@ -1,0 +1,37 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+ext {
+	buildDate = new Date().format('yyyy/MM/dd HH:mm:ss')
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+}
+
+dependencies {
+    compile 'net.imagej:ij:1.50a'
+}
+
+compileJava {
+    options.encoding = "UTF-8"
+    options.failOnError = "true"
+    options.fork = "true"
+    options.forkOptions.with { memoryMaximumSize = "512m" }
+}
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+}
+
+task wrapper(type: Wrapper) { gradleVersion = '2.2' }
+
+test.onlyIf { Boolean.getBoolean('skip.tests') }
