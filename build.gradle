@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
     compile 'net.imagej:ij:1.50a'
+    testCompile 'junit:junit:4.12'
 }
 
 compileJava {
@@ -32,6 +33,6 @@ tasks.withType(JavaCompile) {
     targetCompatibility = "1.8"
 }
 
-task wrapper(type: Wrapper) { gradleVersion = '2.2' }
+task wrapper(type: Wrapper) { gradleVersion = '2.4' }
 
 test.onlyIf { Boolean.getBoolean('skip.tests') }

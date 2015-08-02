@@ -2,36 +2,37 @@ package funy.image;
 
 import java.awt.Rectangle;
 
+import com.sun.image.codec.jpeg.ImageFormatException;
+
 import ij.IJ;
 import ij.ImagePlus;
 import ij.io.Opener;
 import ij.process.ColorProcessor;
 
-public class ImageColorSeen {
+public class ImageTrueColorSeen {
 
-	private static ImageColorSeen colorSeen = new ImageColorSeen();
+	private static ImageTrueColorSeen colorSeen = new ImageTrueColorSeen();
 	private Opener opener;
 
-	private ImageColorSeen() {
+	private ImageTrueColorSeen() {
 		opener = new Opener();
 	}
 
-	public static ImageColorSeen getInstance() {
+	public static ImageTrueColorSeen getInstance() {
 		return colorSeen;
 	}
 
 	public boolean isLooksBlackWhite(String fileAbsolutePath) {
-		try {
 			ImagePlus imp = opener.openImage(fileAbsolutePath);
+			if (24 != imp.getBitDepth()) {
+				throw new ImageFormatException("[" + fileAbsolutePath + "]" 
+						+ "Image does not a type of true-color.");
+			}
 			Rectangle rect = new Rectangle(0, 0, imp.getWidth(), imp.getHeight());
 			ColorProcessor cp = (ColorProcessor) imp.getProcessor();
 			double[] histMean = calculateRgbMean(cp.getWidth(), cp.getPixels(), rect);
 			return (IJ.d2s(histMean[0], 2).equals(IJ.d2s(histMean[1], 2))
 					? IJ.d2s(histMean[0], 2).equals(IJ.d2s(histMean[2], 2)) : false);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 
 	private double[] calculateRgbMean(int width, Object pixels, Rectangle roi) {
