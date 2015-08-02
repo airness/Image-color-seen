@@ -46,11 +46,8 @@ public class ImageTrueColorSeenTest {
 				try {
 					boolean isBW = colorSeen.isLooksBlackWhite(s.toAbsolutePath().toString());
 					System.out.println("[" + s.toAbsolutePath() + "] = " + isBW);
-//					if (isBW) {
-//						Files.copy(s.toAbsolutePath(), new File(bwWriteOutPath + s.getFileName()).toPath());
-//					} else {
-//						Files.copy(s.toAbsolutePath(), new File(colorWriteOutPath + s.getFileName()).toPath());
-//					}
+//					Files.copy(s.toAbsolutePath(), new File(
+//						((isBW)?bwWriteOutPath:colorWriteOutPath) + s.getFileName()).toPath());					
 //				} catch (ImageFormatException | IOException e) {
 				} catch (ImageFormatException e) {
 					System.out.println(e.getMessage());
@@ -73,11 +70,8 @@ public class ImageTrueColorSeenTest {
 			try {
 				boolean isBW = colorSeen.isLooksBlackWhite(s.getAbsolutePath());
 				System.out.println("parallel - [" + s.toPath() + "] = " + isBW);
-//				if (isBW) {
-//					Files.copy(s.toPath(), new File(bwWriteOutPath + s.getName() + "-parallel").toPath());
-//				} else {
-//					Files.copy(s.toPath(), new File(colorWriteOutPath + s.getName() + "-parallel").toPath());
-//				}
+//				Files.copy(s.toPath(), new File(
+//					((isBW)?bwWriteOutPath:colorWriteOutPath) + s.getName() + "-parallel").toPath());
 //			} catch (ImageFormatException | IOException e) { 
 			} catch (ImageFormatException e) { 
 				System.out.println(e.getMessage());
@@ -104,13 +98,10 @@ public class ImageTrueColorSeenTest {
 //						return;
 					}
 //					try {
-//						if (isBW) {
-//							Files.copy(s.toPath(), new File(bwWriteOutPath + s.getName() + "-async").toPath());
-//						} else {
-//							Files.copy(s.toPath(), new File(colorWriteOutPath + s.getName() + "-async").toPath());
-//						}
-//					} catch (IOException ioe) {
-//						ioe.printStackTrace();
+//						Files.copy(s.toPath(), new File(
+//							((isBW)?bwWriteOutPath:colorWriteOutPath) + s.getName() + "-async").toPath());					
+//					} catch (IOException e) {
+//						e.printStackTrace();
 //					}
 				});
 			});
