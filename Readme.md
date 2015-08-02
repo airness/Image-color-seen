@@ -5,9 +5,9 @@ Detect whether the true color image(24bit) looks like black and white.
 - - -
 General Requirements
 ==============================
-Eclipse IDE 
-Gradle
-ImageJ
+Eclipse IDE, 
+Gradle,
+ImageJ,
 Jdk 1.8
 
 - - -
