@@ -66,7 +66,7 @@ public class ImageTrueColorSeenTest {
 					log.log(Level.INFO, "[" + s.toAbsolutePath() + "] = " + isBW);
 //					copy(s.toFile(), isBW, "");					
 				} catch (ImageFormatException e) {
-					System.out.println(e.getMessage());
+					log.log(Level.WARNING, e.getMessage());
 				}
 			});
 		} catch (Exception e) {
@@ -88,7 +88,7 @@ public class ImageTrueColorSeenTest {
 				log.log(Level.INFO,"parallel - [" + s.toPath() + "] = " + isBW);
 //				copy(s, isBW, "-parallel");
 			} catch (ImageFormatException e) { 
-				System.out.println(e.getMessage());
+				log.log(Level.WARNING, e.getMessage());
 			}
 		});
 	}
@@ -108,7 +108,7 @@ public class ImageTrueColorSeenTest {
 				}, writeOutService).whenComplete((isBW, ex) -> {
 					log.log(Level.INFO,"async - [" + s.toPath() + "] = " + isBW);	
 					if (ex != null) {
-						System.out.println(ex.getMessage());
+						log.log(Level.WARNING, ex.getMessage());
 					} else {
 //						copy(s, isBW, "-async");
 					}
