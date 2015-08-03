@@ -12,6 +12,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +25,18 @@ import org.junit.Test;
 import com.sun.image.codec.jpeg.ImageFormatException;
 
 public class ImageTrueColorSeenTest {
+	private static Logger log = Logger.getLogger(ImageTrueColorSeenTest.class.getSimpleName()); 
+	static {
+		Handler conHdlr = new ConsoleHandler();
+		conHdlr.setFormatter(new Formatter() {
+			public String format(LogRecord record) {
+				return "[" + record.getLoggerName() + "] " + record.getLevel() + ": " + record.getMessage() + "\n";
+			}
+		});
+		log.setUseParentHandlers(false);
+		log.addHandler(conHdlr);
+	}
+	
 	String fileExtension;
 	ImageTrueColorSeen colorSeen;
 	String dirAbsolutePath;
@@ -45,11 +63,8 @@ public class ImageTrueColorSeenTest {
 			stream.forEach(s -> {
 				try {
 					boolean isBW = colorSeen.isLooksBlackWhite(s.toAbsolutePath().toString());
-					System.out.println("[" + s.toAbsolutePath() + "] = " + isBW);
-//					Files.copy(s.toAbsolutePath(),
-//						new File(((isBW)?bwWriteOutPath:colorWriteOutPath) 
-//								+ s.getFileName()).toPath());					
-//				} catch (ImageFormatException | IOException e) {
+					log.log(Level.INFO, "[" + s.toAbsolutePath() + "] = " + isBW);
+//					copy(s.toFile(), isBW, "");					
 				} catch (ImageFormatException e) {
 					System.out.println(e.getMessage());
 				}
@@ -70,11 +85,8 @@ public class ImageTrueColorSeenTest {
 		list.parallelStream().forEach(s -> {
 			try {
 				boolean isBW = colorSeen.isLooksBlackWhite(s.getAbsolutePath());
-				System.out.println("parallel - [" + s.toPath() + "] = " + isBW);
-//				Files.copy(s.toPath(), 
-//					new File(((isBW)?bwWriteOutPath:colorWriteOutPath) 
-//							+ s.getName() + "-parallel").toPath());
-//			} catch (ImageFormatException | IOException e) { 
+				log.log(Level.INFO,"parallel - [" + s.toPath() + "] = " + isBW);
+//				copy(s, isBW, "-parallel");
 			} catch (ImageFormatException e) { 
 				System.out.println(e.getMessage());
 			}
@@ -94,17 +106,11 @@ public class ImageTrueColorSeenTest {
 				CompletableFuture.supplyAsync(() -> {
 					return colorSeen.isLooksBlackWhite(s.getAbsolutePath());
 				}, writeOutService).whenComplete((isBW, ex) -> {
-					System.out.println("async - [" + s.toPath() + "] = " + isBW);	
+					log.log(Level.INFO,"async - [" + s.toPath() + "] = " + isBW);	
 					if (ex != null) {
 						System.out.println(ex.getMessage());
 					} else {
-//						try {
-//							Files.copy(s.toPath(), 
-//								new File(((isBW)?bwWriteOutPath:colorWriteOutPath) 
-//										+ s.getName() + "-async").toPath());					
-//						} catch (IOException e) {
-//							e.printStackTrace();
-//						}
+//						copy(s, isBW, "-async");
 					}
 				});
 			});
@@ -116,4 +122,14 @@ public class ImageTrueColorSeenTest {
 			e.printStackTrace();
 		}
 	}
+	
+//	private void copy(File f, boolean isBW, String prefix) {
+//		try {
+//			Files.copy(f.toPath(),
+//				new File(((isBW)?bwWriteOutPath:colorWriteOutPath) 
+//						+ f.getName() + prefix).toPath());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
