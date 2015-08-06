@@ -11,6 +11,7 @@ import ij.process.ColorProcessor;
 
 public class ImageTrueColorSeen {
 
+	private static final int MAX_COLORS = 16777216;
 	private static ImageTrueColorSeen colorSeen = new ImageTrueColorSeen();
 	private Opener opener;
 
@@ -31,8 +32,10 @@ public class ImageTrueColorSeen {
 			Rectangle rect = new Rectangle(0, 0, imp.getWidth(), imp.getHeight());
 			ColorProcessor cp = (ColorProcessor) imp.getProcessor();
 			double[] histMean = calculateRgbMean(cp.getWidth(), cp.getPixels(), rect);
-			return (IJ.d2s(histMean[0], 2).equals(IJ.d2s(histMean[1], 2))
+			boolean mabyBW = (IJ.d2s(histMean[0], 2).equals(IJ.d2s(histMean[1], 2))
 					? IJ.d2s(histMean[0], 2).equals(IJ.d2s(histMean[2], 2)) : false);
+			// Filter equal area RGB tricolor.
+			return (mabyBW) ? !isTricolor(imp) : false;
 	}
 
 	private double[] calculateRgbMean(int width, Object pixels, Rectangle roi) {
@@ -48,7 +51,20 @@ public class ImageTrueColorSeen {
 		}
 		return hmean;
 	}
-
+	
+	private boolean isTricolor(ImagePlus imp) {
+		int colors = 0;
+		int[] counts = new int[MAX_COLORS];
+		int[] pixels = (int[])imp.getProcessor().getPixels();
+		for (int i=0; i<pixels.length; i++)
+			counts[pixels[i]&0xffffff]++;
+	
+		for (int i=0; i<MAX_COLORS; i++) 
+			if (counts[i]>0) colors++;
+		
+		return (colors <= 3);
+    }
+	
 	private int[][] getHistogram(int width, int[] pixels, Rectangle roi) {
 		int c, r, g, b;
 		int roiY = roi.y;
